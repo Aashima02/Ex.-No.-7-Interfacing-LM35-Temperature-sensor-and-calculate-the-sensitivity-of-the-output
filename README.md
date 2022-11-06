@@ -1,18 +1,21 @@
  
 
 
-### Ex. No. :7
-## Date: 
-### Interfacing LM35 Temperature sensor and calculate the sensitivity of the output
+# Ex. No. :7
+# Interfacing LM35 Temperature sensor and calculate the sensitivity of the output
 
-## Aim: 
+## Date: 06/11/2022
+
+## AIM: 
 To configure internal ADC for   LPC2148 ARM 7  for interfacing LM35 temperature sensor.
-## Components required:
+
+## COMPONENTS REQUIRED:
 Proteus ISIS professional suite, Kiel μ vision 5 Development environment 
  ![image](https://user-images.githubusercontent.com/36288975/200110365-9e1f8a55-c943-43f1-94de-60003f6308b7.png)
   
 Figure-01 ADC pins in LPC2148 ARM 7 controller 
- ## Theory 
+
+## THEORY: 
 Analog to Digital Converter (ADC) is used to convert analog signal into digital form. LPC2148 has two inbuilt 10-bit ADC i.e. ADC0 & ADC1.
 •	ADC0 has 6 channels &ADC1 has 8 channels.
 •	Hence, we can connect 6 distinct types of input analog signals to ADC0 and 8 distinct types of input analog signals to ADC1.
@@ -156,7 +159,7 @@ This bit is set to 1 when an A/D conversion completes. It is cleared when this r
  
 
 
-Procedure:
+## PROCEDURE:
 Steps for Analog to Digital Conversion
 1.	Configure the ADxCR (ADC Control Register) according to the need of application.
 2.	Start ADC conversion by writing appropriate value to START bits in ADxCR. (Example, writing 001 to START bits of the register 26:24, conversion is started immediately).
@@ -191,39 +194,62 @@ Low-Impedance Output, 0.1 Ω for 1-mA Load
 
 Figure -08 Circuit diagram of interfacing an LM35  with ADC input pin 
 
-## Kiel - Program 
+## KIEL PROGRAM:
+```
+#include <lpc214x.h>
+#include "LCD.h"
+#include "ADC.h"
+
+unsigned int val;
+int main()
+{
+	IO1DIR = 0xffffffff;
+	IO0DIR = 0x00000000;
+	PINSEL0 = 0x300;
+	VPBDIV = 0x02;
+	lcd_init();
+	show(" ADC Value: ");
+	while(1)
+	{
+		cmd(0x8b);
+		val = adc(0,6);
+		dat((val/1000)+48);
+		dat(((val/100)%10)+48);
+		dat(((val/10)%10)+48);
+		dat((val%10)+48);
+	}
+}
+```
  
-## Tabulations and graph 
+## TABULATION:
 Calculation of sensitivity 
 % of sensitivity is   S=  (T2-T1)/(A2-A1)*100
+![7table](https://user-images.githubusercontent.com/93427086/200153513-b042219d-752b-499f-953d-cd5a06eef509.jpg)
+
+
+ ## GRAPH:
+ ![7graph](https://user-images.githubusercontent.com/93427086/200153522-738d9dc5-e221-4732-9114-19270b9271e3.png)
+
+ Figure -09 graph between temperature values and ADC output 
 
 
 
 
-SL NO	Temperature value in °C (T)	ADC VALUE (A)	Sensitivity 
-1			-
-2			
-3			
-4			
-5			
-6			
-7			
-8			
-9			
-10			
+## OUTPUT:
+
+### Before Stimulation:
+![acdOFF](https://user-images.githubusercontent.com/93427086/200153543-7d5d627d-f63f-415e-9b48-6263c7ff4f3b.png)
+
+### After Stimulation:
+![acdON](https://user-images.githubusercontent.com/93427086/200153550-98e0fd73-c1cd-4f2f-bc23-5f75bad37cc8.png)
+
+### Circuit Diagram:
+![circuit](https://user-images.githubusercontent.com/93427086/200153553-3851248c-a492-42fd-9120-69c30c4c1e6a.png)
 
 
- 
-Figure -09 graph between temperature values and ADC output 
 
 
-## Result :
+## RESULT:
 Temperature sensor LM35 is interfaced to LPC2148 and its output is measured 
-
-## Output screen shots :
-
-
-
-
 
 
